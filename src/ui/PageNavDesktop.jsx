@@ -169,8 +169,8 @@ function PageNavDesktop() {
               to="/recurring-bills"
               className={({ isActive }) =>
                 isActive
-                  ? `flex items-start gap-4 rounded-r-xl border-l-4 border-[#277c78] bg-gray-200 py-3.5 ${minimizeMenu ? "w-16 px-4" : "w-64 px-4"}`
-                  : `${minimizeMenu ? "px-6" : "px-6"} flex items-start gap-4 py-3.5`
+                  ? `flex items-center gap-4 rounded-r-xl border-l-4 border-[#277c78] bg-gray-200 py-3.5 ${minimizeMenu ? "w-16 px-4" : "w-64 px-4"}`
+                  : `${minimizeMenu ? "px-6" : "px-6"} flex items-center gap-4 py-3.5`
               }
             >
               {({ isActive }) => (
