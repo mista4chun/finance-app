@@ -1,7 +1,9 @@
+import BudgetsCompilations from "../features/Budgets/BudgetsCompilations"
+
 function Budgets() {
     return (
         <div>
-            budgets
+           <BudgetsCompilations />
         </div>
     )
 }

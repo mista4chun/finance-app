@@ -1,9 +1,10 @@
-
 import TransactionRow from "./TransactionRow";
 import Spinner from "../../ui/Spinner";
 import useTransactions from "./useTransactions";
 
 import { useGlobalSearchParams } from "../../hooks/useGlobalSearchParams";
+import Pagination from "../../ui/Pagination";
+import { PAGE_SIZE } from "../../utils/constants";
 
 function Table() {
   const { isLoading, transactions } = useTransactions();
@@ -13,7 +14,6 @@ function Table() {
 
   // 1 Filter
   const filterValue = getParam("category") || "All Transactions";
-
 
   let filteredData =
     filterValue === "All Transactions"
@@ -31,7 +31,6 @@ function Table() {
 
   // 3 Sort
   // const sortOption = searchParams.get("sort") || "Latest";
-
 
   // const sortedData = [...filteredData].sort((a, b) => {
   //   switch (sortOption) {
@@ -53,6 +52,12 @@ function Table() {
 
   // });
 
+  // 4 Pagination
+  const currentPage = !getParam("page") ? 1 : Number(getParam("page"));
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
+
   return (
     <>
       {/* TableHeader */}
@@ -63,18 +68,16 @@ function Table() {
         <div>Transaction Date</div>
         <div>Amount</div>
       </div>
-
-      {filteredData.length > 0 ? (
-        filteredData?.map((transaction) => (
-          <TransactionRow
-            transaction={transaction}
-            key={transaction.id}
-            filteredData={filteredData}
-          />
-        ))
-      ) : (
-        <p>No Transaction found</p>
-      )}
+      <div>
+        {paginatedData.length > 0 ? (
+          paginatedData?.map((transaction) => (
+            <TransactionRow transaction={transaction} key={transaction.id} />
+          ))
+        ) : (
+          <p>No Transaction found</p>
+        )}
+      </div>
+      <Pagination count={filteredData.length} />
     </>
   );
 }
