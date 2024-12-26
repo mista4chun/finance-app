@@ -1,9 +1,10 @@
 function Pots() {
-    return (
-        <div>
-            Pots
-        </div>
-    )
+  return (
+    <div>
+      Pots
+     
+    </div>
+  );
 }
 
-export default Pots
+export default Pots;

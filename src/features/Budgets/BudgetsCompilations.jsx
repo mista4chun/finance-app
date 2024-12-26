@@ -1,32 +1,29 @@
+
+import BudgetComponent from "./BudgetComponent";
 import BudgetsSummary from "./BudgetsSummary";
 
+
 function BudgetsCompilations() {
+
+
   return (
     <section className="px-4 py-6">
-      <div className="flex items-center justify-between pb-6">
+      <div className="flex items-center justify-between pb-3">
         <h1 className="text-3xl font-bold">Budgets</h1>
         <button className="rounded-md bg-[#201f24] px-4 py-3.5 font-bold tracking-tighter text-gray-100">
           +Add New Budget
         </button>
       </div>
-      <div>
+
+       <div className="flex-col items-start space-y-5 md:grid md:gap-5 md:space-y-0 lg:grid-cols-[1fr_1.5fr]">
         <BudgetsSummary />
-        <div className="mt-5 rounded-lg bg-gray-50 px-3">
-          <div className="flex items-center justify-between">
 
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-full bg-green-500"></div>
-              <h1>Entertainment</h1>
-            </div>
-
-            <img src="/icon-ellipsis.svg" alt="ellipsis-button" />
-
-          </div>
-
-
-
+        <div>
+          {/* {budgets?.map((budget) => (
+            <BudgetComponent budget={budget} key={budget.id} />
+          ))} */}
         </div>
-      </div>
+      </div> 
     </section>
   );
 }

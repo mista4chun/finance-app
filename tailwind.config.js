@@ -2,9 +2,10 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
-    height: {
-      screen: "100dvh",
+    extend: {
+      height: {
+        screen: "100dvh", // Add your custom value without removing defaults
+      },
     },
   },
   plugins: [],

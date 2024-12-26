@@ -1,65 +1,189 @@
 import TransactionRow from "./TransactionRow";
 import Spinner from "../../ui/Spinner";
-import useTransactions from "./useTransactions";
 
-import { useGlobalSearchParams } from "../../hooks/useGlobalSearchParams";
 import Pagination from "../../ui/Pagination";
+
+import { getTransactions } from "../../services/transactionApi";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { PAGE_SIZE } from "../../utils/constants";
 
 function Table() {
-  const { isLoading, transactions } = useTransactions();
-  const { getParam } = useGlobalSearchParams();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+
+  const [sort, setSort] = useState({ column: "date", ascending: false });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedSort, setSelectedSort] = useState("Latest");
+
+  const [filter, setFilter] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("All Transactions");
+
+  const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
+
+  const {
+    data: transactionsData,
+    isLoading,
+    error,
+  } = useQuery(
+    ["transactions", { page, search, PAGE_SIZE, sort, filter }],
+    getTransactions,
+  );
+
+  const transactions = transactionsData?.data || [];
+  const totalCount = transactionsData?.count || 0;
+
+  const totalPages = totalCount > 0 ? Math.ceil(totalCount / PAGE_SIZE) : 1;
+
+    
+  const handleSort = (type) => {
+    // Update the selected sort value for display
+    const sortLabels = {
+      latest: "Latest",
+      oldest: "Oldest",
+      "a-z": "A to Z",
+      "z-a": "Z to A",
+      highest: "Highest",
+      lowest: "Lowest",
+    };
+
+    setSelectedSort(sortLabels[type]); // Set the display label
+    setIsDropdownOpen(false); // Close the dropdown
+
+    // Apply the sorting logic
+    switch (type) {
+      case "latest":
+        setSort({ column: "date", ascending: false });
+        break;
+      case "oldest":
+        setSort({ column: "date", ascending: true });
+        break;
+      case "a-z":
+        setSort({ column: "name", ascending: true });
+        break;
+      case "z-a":
+        setSort({ column: "name", ascending: false });
+        break;
+      case "highest":
+        setSort({ column: "amount", ascending: false });
+        break;
+      case "lowest":
+        setSort({ column: "amount", ascending: true });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleFilter = (value, label) => {
+    setFilter(value === "all" ? "" : value);
+    setSelectedFilter(label);
+    setIsDropdownOpen1(false);
+  };
+
+  const filterOptions = [
+    { value: "all", label: "All Transactions" },
+    { value: "Entertainment", label: "Entertainment" },
+    { value: "Bills", label: "Bills" },
+    { value: "Groceries", label: "Groceries" },
+    { value: "Dining Out", label: "Dining Out" },
+    { value: "Transportation", label: "Transportation" },
+    { value: "Personal Care", label: "Personal Care" },
+    { value: "Education", label: "Education" },
+    { value: "Lifestyle", label: "Lifestyle" },
+    { value: "Shopping", label: "Shopping" },
+    { value: "General", label: "General" },
+  ];
 
   if (isLoading) return <Spinner />;
-
-  // 1 Filter
-  const filterValue = getParam("category") || "All Transactions";
-
-  let filteredData =
-    filterValue === "All Transactions"
-      ? transactions
-      : transactions?.filter((item) => item.category === filterValue);
-
-  // 2 Search
-  const searchQuery = getParam("search") || "";
-
-  if (searchQuery) {
-    filteredData = filteredData.filter((transaction) =>
-      transaction.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }
-
-  // 3 Sort
-  // const sortOption = searchParams.get("sort") || "Latest";
-
-  // const sortedData = [...filteredData].sort((a, b) => {
-  //   switch (sortOption) {
-  //     case "Latest":
-  //       return b.date - a.date; // Sort by date descending
-  //     case "Oldest":
-  //       return a.date - b.date; // Sort by date ascending
-  //     case "Highest":
-  //       return b.amount - a.amount; // Sort by value descending
-  //     case "Lowest":
-  //       return a.amount - b.amount; // Sort by value ascending
-  //     case "A-Z":
-  //       return a.name.localeCompare(b.name); // Alphabetical ascending
-  //     case "Z-A":
-  //       return b.name.localeCompare(a.name); // Alphabetical descending
-  //     default:
-  //       return 0;
-  //   }
-
-  // });
-
-  // 4 Pagination
-  const currentPage = !getParam("page") ? 1 : Number(getParam("page"));
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-  const paginatedData = filteredData.slice(startIndex, endIndex);
+  if (error) return <p>Error loading transactions.</p>;
 
   return (
     <>
+      <div className="mb-8 flex items-center justify-between md:items-start">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="mb-4 rounded-lg border border-gray-500 p-2 outline-none"
+        />
+
+        <div className="flex items-center gap-8">
+          <div className="relative mx-auto max-w-md">
+            <div className="flex items-center gap-3">
+              <p className="hidden text-gray-400 md:block">Sort by</p>
+              <button
+                className="cursor-pointer items-center justify-between bg-transparent outline-none ring-gray-500 ring-offset-2 md:flex md:gap-4 md:rounded-md md:px-4 md:py-2 md:ring-1"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <span className="hidden md:block text-sm">{selectedSort}</span>
+                <img
+                  src="/icon-caret-down.svg"
+                  alt="caret"
+                  className="hidden md:block"
+                />
+                <img
+                  src="/icon-sort-mobile.svg"
+                  alt="sort-mobile"
+                  className="md:hidden"
+                />
+              </button>
+            </div>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-28 rounded-lg bg-white shadow-xl">
+                <div className="flex flex-col items-start gap-3 px-3 py-3">
+                  <button onClick={() => handleSort("latest")}>Latest</button>
+                  <button onClick={() => handleSort("oldest")}>Oldest</button>
+                  <button onClick={() => handleSort("a-z")}>A to Z</button>
+                  <button onClick={() => handleSort("z-a")}>Z to A</button>
+                  <button onClick={() => handleSort("highest")}>Highest</button>
+                  <button onClick={() => handleSort("lowest")}>Lowest</button>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="relative mx-auto max-w-md">
+            <div className="flex items-center gap-3">
+              <p className="hidden text-gray-400 md:block">Category</p>
+              <button
+                className="cursor-pointer items-center justify-between bg-transparent outline-none ring-gray-500 ring-offset-2 md:flex md:gap-4 md:rounded-md md:px-4 md:py-2 md:ring-1"
+                onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}
+              >
+                <span className="hidden md:block text-sm">{selectedFilter}</span>
+                <img
+                  src="/icon-caret-down.svg"
+                  alt="caret"
+                  className="hidden md:block"
+                />
+                <img
+                  src="/icon-filter-mobile.svg"
+                  alt="filter"
+                  className="md:hidden"
+                />
+              </button>
+            </div>
+            {/* dropdown Items */}
+
+            {isDropdownOpen1 && (
+              <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white shadow-xl">
+                <div className="flex flex-col items-start gap-3 px-3 py-3">
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleFilter(option.value, option.label)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* TableHeader */}
       <div className="hidden grid-cols-[1fr_0.8fr_0.8fr_auto] gap-8 border-b border-gray-300 py-2 text-xs font-medium text-gray-500 md:grid">
         <div>Recipient / Sender</div>
@@ -69,15 +193,16 @@ function Table() {
         <div>Amount</div>
       </div>
       <div>
-        {paginatedData.length > 0 ? (
-          paginatedData?.map((transaction) => (
+        {transactions.length > 0 ? (
+          transactions?.map((transaction) => (
             <TransactionRow transaction={transaction} key={transaction.id} />
           ))
         ) : (
           <p>No Transaction found</p>
         )}
       </div>
-      <Pagination count={filteredData.length} />
+     
+      <Pagination totalPages={totalPages} page={page} setPage={setPage} />
     </>
   );
 }
