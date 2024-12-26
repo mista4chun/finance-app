@@ -1,54 +1,51 @@
 import { Link } from "react-router-dom";
-import { formatCurrency } from "../../utils/helper";
+import { formatCurrency, formatISODate } from "../../utils/helper";
 
 function BudgetComponent({ budget }) {
- 
-
-  const  categoryName = categories?.name || "Unknown";
-  const theme = categories?.budgets?.[0]?.theme || "#ccc";
-  const maximum = categories?.budgets?.[0]?.maximum || '10'
+  const remaining = Math.abs(budget.maximum) - Math.abs(budget.spent);
+  const rems = remaining < 0 ? 0 : remaining
+  const progressPercentage = Math.min(Math.abs(budget.spent  ) / Math.abs(budget.maximum) * 100, 100)
  
   return (
-    <div className="mb-3 w-full rounded-lg bg-gray-50 px-3 py-3">
+    <div className="mb-3 w-full rounded-xl bg-gray-50 px-8 py-7">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span
             className="h-4 w-4 rounded-full"
             style={{
-              backgroundColor: theme
+              backgroundColor: budget.theme,
             }}
-            
           ></span>
-          <h1 className="text-lg font-bold">{categoryName
-          }</h1>
+          <h1 className="text-lg font-bold">{budget.category}</h1>
         </div>
 
         <img src="/icon-ellipsis.svg" alt="" />
       </div>
 
       <p className="pb-2.5 pt-4 text-gray-400">
-        Maximum of {formatCurrency(maximum)}
-
+        Maximum of {formatCurrency(budget.maximum)}
       </p>
 
       {/* ProgressBar */}
       <div className="flex h-8 w-full items-center rounded-md bg-[#F8F4F0]">
         <div
-          className="mx-1 my-1 h-6 w-[50%] rounded-md"
+          className={`mx-1 my-1 h-6 rounded-md`}
           style={{
-            backgroundColor: theme
+            width: `${progressPercentage}%`,
+            backgroundColor: budget.theme,
           }}
         ></div>
       </div>
       <div className="grid grid-cols-2 pt-4">
-        <div className=" px-3">
-       
+        <div className="px-3 border-l-4 " style={{borderLeft: `4px solid ${budget.theme}`}}>
           <span className="text-sm text-gray-400">Spent</span>
-          <p className="font-semibold">$25</p>
+          <p className="font-semibold">
+            {formatCurrency(Math.abs(budget.spent))}
+          </p>
         </div>
-        <div className="border-l-4 px-3">
-          <span className="text-sm text-gray-400">Free</span>
-          <p className="font-semibold">$25</p>
+        <div className="border-l-4 border-l-[#F8F4F0] px-3">
+          <span className="text-sm text-gray-400">Remaining</span>
+          <p className="font-semibold">{formatCurrency(rems)}</p>
         </div>
       </div>
 
@@ -63,34 +60,27 @@ function BudgetComponent({ budget }) {
             <img src="/icon-caret-right.svg" alt="" className="w-1" />
           </Link>
         </div>
-        <div className="flex items-center justify-between border-b pb-2 pt-4 text-xs last:border-b-0">
-          <div className="flex items-center gap-3">
-            <img
-              src="/avatars/ethan-clark.jpg"
-              alt=""
-              className="hidden w-8 rounded-full md:block"
-            />
-            <p className="font-semibold">Ethan Clark</p>
+        {budget.latestTransactions?.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center justify-between border-b pb-2 pt-4 text-xs last:border-b-0"
+          >
+            <div className="flex items-center gap-3">
+              <img
+                src={item.avatar}
+                alt=""
+                className="hidden w-8 rounded-full md:block"
+              />
+              <p className="font-semibold">{item.name}</p>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-right font-semibold">
+                {formatCurrency(item.amount)}
+              </span>
+              <span>{formatISODate(item.date, "dd MMM yyyy")}</span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-right font-semibold">$75.00</span>
-            <span>19 Aug 2024</span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between border-b pb-2 pt-4 text-xs last:border-b-0">
-          <div className="flex items-center gap-3">
-            <img
-              src="/avatars/ethan-clark.jpg"
-              alt=""
-              className="hidden w-8 rounded-full md:block"
-            />
-            <p className="font-semibold">Ethan Clark</p>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-right font-semibold">$75.00</span>
-            <span>19 Aug 2024</span>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
