@@ -28,8 +28,8 @@ function BudgetsSummary({ budgets }) {
     ],
   };
   return (
-    <div className="flex flex-col rounded-xl bg-gray-50 px-8 pb-5 pt-10 font-semibold md:flex-row md:justify-between lg:flex-col">
-      <div className="mx-auto grow px-5 pb-10">
+    <div className="flex flex-col rounded-xl  bg-gray-50 px-8 pb-5 pt-10 font-semibold md:flex-row md:justify-between lg:flex-col">
+      <div className=" size-64 md:size-72 mx-auto  px-5 pb-10 ">
        <Pie data={pieChartData} />
       </div>
 
@@ -44,8 +44,8 @@ function BudgetsSummary({ budgets }) {
               ></span>
               {item.category}
             </div>
-            <div>
-              <span className="text-lg font-semibold text-gray-800">{formatCurrency(Math.abs(item.spent))} </span>
+            <div className="tracking-wide">
+              <span className="text-lg font-semibold text-gray-800 ">{formatCurrency(Math.abs(item.spent))} </span>
               of  {formatCurrency(Math.abs(item.maximum))}
             </div>
           </div>

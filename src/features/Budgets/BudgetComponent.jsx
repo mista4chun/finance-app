@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { formatCurrency, formatISODate } from "../../utils/helper";
+import { useState } from "react";
+import EditBudget from "./EditBudget";
+import DeleteBudget from "./DeleteBudget";
 
 function BudgetComponent({ budget }) {
   const remaining = Math.abs(budget.maximum) - Math.abs(budget.spent);
-  const rems = remaining < 0 ? 0 : remaining
-  const progressPercentage = Math.min(Math.abs(budget.spent  ) / Math.abs(budget.maximum) * 100, 100)
- 
+  const rems = remaining < 0 ? 0 : remaining;
+  const progressPercentage = Math.min(
+    (Math.abs(budget.spent) / Math.abs(budget.maximum)) * 100,
+    100,
+  );
+  const [isMiniModalOpen, setIsMiniModalOpen] = useState(false);
+
   return (
     <div className="mb-3 w-full rounded-xl bg-gray-50 px-8 py-7">
       <div className="flex items-center justify-between">
@@ -19,7 +26,20 @@ function BudgetComponent({ budget }) {
           <h1 className="text-lg font-bold">{budget.category}</h1>
         </div>
 
-        <img src="/icon-ellipsis.svg" alt="" />
+        <div className="relative"> 
+
+        <button onClick={() => setIsMiniModalOpen(!isMiniModalOpen)} >
+          <img src="/icon-ellipsis.svg" alt="" />
+        </button>
+        {isMiniModalOpen && (
+          <>
+            <div className="rounded-md divide-y  w-32 text-sm  bg-gray-100 px-4 py-4  absolute right-0 shadow-xl">
+              <EditBudget />
+              <DeleteBudget budgetId={budget.id} />
+            </div>
+          </>
+        )}
+        </div>
       </div>
 
       <p className="pb-2.5 pt-4 text-gray-400">
@@ -27,7 +47,7 @@ function BudgetComponent({ budget }) {
       </p>
 
       {/* ProgressBar */}
-      <div className="flex h-8 w-full items-center rounded-md bg-[#F8F4F0]">
+      <div className="flex h-8 w-full items-center rounded-sm bg-[#F8F4F0]">
         <div
           className={`mx-1 my-1 h-6 rounded-md`}
           style={{
@@ -37,7 +57,10 @@ function BudgetComponent({ budget }) {
         ></div>
       </div>
       <div className="grid grid-cols-2 pt-4">
-        <div className="px-3 border-l-4 " style={{borderLeft: `4px solid ${budget.theme}`}}>
+        <div
+          className="border-l-4 px-3"
+          style={{ borderLeft: `4px solid ${budget.theme}` }}
+        >
           <span className="text-sm text-gray-400">Spent</span>
           <p className="font-semibold">
             {formatCurrency(Math.abs(budget.spent))}
