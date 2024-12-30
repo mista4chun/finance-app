@@ -4,7 +4,7 @@ import { useState } from "react";
 import EditBudget from "./EditBudget";
 import DeleteBudget from "./DeleteBudget";
 
-function BudgetComponent({ budget }) {
+function BudgetComponent({ budget, close, openModal }) {
   const remaining = Math.abs(budget.maximum) - Math.abs(budget.spent);
   const rems = remaining < 0 ? 0 : remaining;
   const progressPercentage = Math.min(
@@ -26,19 +26,18 @@ function BudgetComponent({ budget }) {
           <h1 className="text-lg font-bold">{budget.category}</h1>
         </div>
 
-        <div className="relative"> 
-
-        <button onClick={() => setIsMiniModalOpen(!isMiniModalOpen)} >
-          <img src="/icon-ellipsis.svg" alt="" />
-        </button>
-        {isMiniModalOpen && (
-          <>
-            <div className="rounded-md divide-y  w-32 text-sm  bg-gray-100 px-4 py-4  absolute right-0 shadow-xl">
-              <EditBudget />
+        <div className="relative">
+          <button onClick={() => setIsMiniModalOpen(!isMiniModalOpen)}>
+            <img src="/icon-ellipsis.svg" alt="" className="cursor-pointer" />
+          </button>
+          {isMiniModalOpen && (
+            <div className="absolute right-0 w-32 divide-y rounded-md bg-gray-100 px-4 py-4 text-sm shadow-xl">
+           
+                <EditBudget budget={budget} close={close} openModal={openModal} />
+             
               <DeleteBudget budgetId={budget.id} />
             </div>
-          </>
-        )}
+          )}
         </div>
       </div>
 

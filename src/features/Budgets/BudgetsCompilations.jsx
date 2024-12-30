@@ -35,7 +35,7 @@ if(isLoading) return <p className="flex items-center justify-center h-screen ani
 
         <div>
           {budgets?.map((budget) => (
-            <BudgetComponent budget={budget} key={budget.id} />
+            <BudgetComponent budget={budget} key={budget.id} close={setOpenModal} openModal={openModal} />
           ))}
         </div>
       </div>

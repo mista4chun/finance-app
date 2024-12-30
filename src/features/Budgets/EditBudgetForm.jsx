@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useBudgets } from "./useBudgets";
 import { useForm, Controller } from "react-hook-form";
-import { createBudget } from "../../services/budgetApi";
+import { updateBudget } from "../../services/budgetApi";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
-function CreateBudgetForm({ close, openModal  }) {
+function EditBudgetForm({ showModal, setShowModal, budget = {} }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -15,17 +15,24 @@ function CreateBudgetForm({ close, openModal  }) {
     watch,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      category: budget.category,
+      maximum: budget.maximum,
+      theme: budget.theme,
+    },
+  });
 
   const { budgets } = useBudgets();
 
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createBudget,
+  const { mutate, isLoading: isUpdating } = useMutation({
+    mutationFn: updateBudget,
     onSuccess: () => {
-      toast.success("Budget created successfully");
+      toast.success("Budget updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["budgets"],
       });
+      setShowModal((s) => !s);
     },
 
     onError: (err) => toast.error(err.message),
@@ -62,11 +69,14 @@ function CreateBudgetForm({ close, openModal  }) {
   ];
 
   const categories = availableCategories.filter(
-    (category) => !budgets.some((budget) => budget.category === category),
+    (category) =>
+      category === budget.category || // Allow editing the current category
+      !budgets.some((existingBudget) => existingBudget.category === category),
   );
 
-  // Extract used colors from the budgets
-  const usedColors = budgets.map((budget) => budget.theme);
+  const usedColors = budgets
+    .filter((b) => b.theme !== budget.theme) // Exclude the current theme
+    .map((b) => b.theme);
 
   // Filter available colors by excluding used ones
   const availableColors = colors.filter(
@@ -75,27 +85,27 @@ function CreateBudgetForm({ close, openModal  }) {
 
   const selectedTheme = watch("theme"); // Watch for the selected theme
 
-  const submitForm = (data) => {
-    mutate(data); // Pass form data to parent or backend
-    close((s) => !s);
-   
-  };
+ 
+    const submitForm = (data) => {
+        mutate({ newBudget: data, id: budget.id }); // Ensure the `id` is passed
+      };
+      
+    // Pass form data to parent or backend
 
-  
+
   return (
     <div className="absolute inset-0 z-40 flex h-screen items-center justify-center bg-black/40">
       <div className="max-w-sm rounded-2xl bg-gray-100 px-6 py-8 md:max-w-xl">
         <div className="flex items-center justify-between gap-3 pb-4">
-          <h1 className="text-3xl font-bold">Add New Budget</h1>
+          <h1 className="text-3xl font-bold">Edit Budget</h1>
           <img
             src="/icon-close-modal.svg"
             alt=""
-            onClick={() => close(!openModal)}
+            onClick={() => setShowModal(!showModal)}
           />
         </div>
         <p className="pb-4 text-sm text-gray-600">
-          Choose a category to set a spending budget.These categories can help
-          you monitor spending.{" "}
+          As your budgets change, feel free to update your spending limits.
         </p>
 
         <form
@@ -219,9 +229,9 @@ function CreateBudgetForm({ close, openModal  }) {
           <button
             type="submit"
             className="mt-2 rounded-lg bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#696868]"
-            disabled={isCreating}
+            disabled={isUpdating}
           >
-            Add Budget
+            Save Changes
           </button>
         </form>
       </div>
@@ -229,4 +239,4 @@ function CreateBudgetForm({ close, openModal  }) {
   );
 }
 
-export default CreateBudgetForm;
+export default EditBudgetForm;
