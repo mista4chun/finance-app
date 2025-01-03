@@ -5,9 +5,11 @@ import EditBudget from "./EditBudget";
 import DeleteBudget from "./DeleteBudget";
 
 function BudgetComponent({ budget, close, openModal }) {
+  
   const remaining = Math.abs(budget.maximum) - Math.abs(budget.spent);
   const rems = remaining < 0 ? 0 : remaining;
   const progressPercentage = Math.min(
+   
     (Math.abs(budget.spent) / Math.abs(budget.maximum)) * 100,
     100,
   );

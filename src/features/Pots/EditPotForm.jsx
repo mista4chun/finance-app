@@ -1,49 +1,42 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useBudgets } from "./useBudgets";
-import { useForm, Controller } from "react-hook-form";
-import { createBudget } from "../../services/budgetApi";
-import toast from "react-hot-toast";
 import { useState } from "react";
 import FormLayout from "../../ui/FormLayout";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { usePots } from "./usePots";
+import toast from "react-hot-toast";
+import { updatePot } from "../../services/potsApi";
 
-function CreateBudgetForm({ close, openModal }) {
+function EditPotForm({ pot = {}, openModal, close }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const queryClient = useQueryClient();
   const {
-    control,
     handleSubmit,
     register,
     watch,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: pot.name,
+      target: pot.target,
+      theme: pot.theme,
+    },
+  });
 
-  const { budgets } = useBudgets();
+  const { pots } = usePots();
 
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createBudget,
+  const { mutate, isLoading: isUpdating } = useMutation({
+    mutationFn: updatePot,
     onSuccess: () => {
-      toast.success("Budget created successfully");
+      toast.success("Budget updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["budgets"],
+        queryKey: ["pots"],
       });
+      close((s) => !s);
     },
 
     onError: (err) => toast.error(err.message),
   });
-
-  const availableCategories = [
-    "Entertainment",
-    "Bills",
-    "Groceries",
-    "Dining Out",
-    "Transportation",
-    "Personal Care",
-    "Education",
-    "Shopping",
-    "Lifestyle",
-    "General",
-  ];
 
   const colors = [
     { name: "Green", hex: "#277C78" },
@@ -62,12 +55,9 @@ function CreateBudgetForm({ close, openModal }) {
     { name: "Orange", hex: "#BE6C49" },
   ];
 
-  const categories = availableCategories.filter(
-    (category) => !budgets.some((budget) => budget.category === category),
-  );
-
-  // Extract used colors from the budgets
-  const usedColors = budgets.map((budget) => budget.theme);
+  const usedColors = pots
+    .filter((b) => b.theme !== pot.theme) // Exclude the current theme
+    .map((b) => b.theme);
 
   // Filter available colors by excluding used ones
   const availableColors = colors.filter(
@@ -77,67 +67,61 @@ function CreateBudgetForm({ close, openModal }) {
   const selectedTheme = watch("theme"); // Watch for the selected theme
 
   const submitForm = (data) => {
-    mutate(data); // Pass form data to parent or backend
-    close((s) => !s);
+    mutate({ newPot: data, id: pot.id }); // Ensure the `id` is passed
   };
+
+  // Pass form data to parent or backend
 
   return (
     <FormLayout
-      title="Budget"
-      description="Choose a category to set a spending budget.These categories can help you monitor spending."
+      title="Edit Pot"
+      description="If your saving targets change, feel free to update your pots."
       close={close}
       openModal={openModal}
     >
       <form onSubmit={handleSubmit(submitForm)} className="flex flex-col gap-5">
         <div>
           <label
-            htmlFor="category"
+            htmlFor="name"
             className="block text-xs font-medium text-gray-700"
           >
-            Budget Category
+            Pot Name
           </label>
-          <Controller
-            name="category"
-            control={control}
-            rules={{ required: "Category is required" }}
-            render={({ field }) => (
-              <select
-                {...field}
-                className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            )}
+          <input
+            {...register("name", {
+              required: "Pot name  is required",
+              setValueAs: (value) => value.trim(),
+              validate: (value) =>
+                value.length > 0 || "Name cannot be empty after trimming",
+            })}
+            type="text"
+            placeholder="$ e.g. 2000"
+            className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
           />
-          {errors.category && (
-            <p className="text-sm text-red-500">{errors.category.message}</p>
+          {errors.name && (
+            <p className="text-sm text-red-500">{errors.name.message}</p>
           )}
         </div>
 
         <div>
           <label
-            htmlFor="maximum"
+            htmlFor="target"
             className="block text-xs font-medium text-gray-700"
           >
             Maximum Spend
           </label>
           <input
-            {...register("maximum", {
-              required: "Maximum spend is required",
+            {...register("target", {
+              required: "Target is required",
               valueAsNumber: true,
             })}
             type="number"
             placeholder="$ e.g. 2000"
             className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
           />
-                {errors.maximum && (
-          <p className="text-sm text-red-500">{errors.maximum.message}</p>
-        )}
+          {errors.target && (
+            <p className="text-sm text-red-500">{errors.target.message}</p>
+          )}
         </div>
 
         <div>
@@ -209,13 +193,13 @@ function CreateBudgetForm({ close, openModal }) {
         <button
           type="submit"
           className="mt-2 rounded-lg bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#696868]"
-          disabled={isCreating}
+          disabled={isUpdating}
         >
-          Add Budget
+          Save Changes
         </button>
       </form>
     </FormLayout>
   );
 }
 
-export default CreateBudgetForm;
+export default EditPotForm;

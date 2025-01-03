@@ -1,49 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useBudgets } from "./useBudgets";
-import { useForm, Controller } from "react-hook-form";
-import { createBudget } from "../../services/budgetApi";
-import toast from "react-hot-toast";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import FormLayout from "../../ui/FormLayout";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { usePots } from "./usePots";
+import { createPot } from "../../services/potsApi";
+import toast from "react-hot-toast";
 
-function CreateBudgetForm({ close, openModal }) {
+function CreatePotsForm({ close, openModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const queryClient = useQueryClient();
   const {
-    control,
     handleSubmit,
     register,
     watch,
     setValue,
+
     formState: { errors },
   } = useForm();
 
-  const { budgets } = useBudgets();
+  const { pots } = usePots();
 
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createBudget,
+    mutationFn: createPot,
     onSuccess: () => {
-      toast.success("Budget created successfully");
+      toast.success("Pot created successfully");
       queryClient.invalidateQueries({
-        queryKey: ["budgets"],
+        queryKey: ["pots"],
       });
     },
 
     onError: (err) => toast.error(err.message),
   });
-
-  const availableCategories = [
-    "Entertainment",
-    "Bills",
-    "Groceries",
-    "Dining Out",
-    "Transportation",
-    "Personal Care",
-    "Education",
-    "Shopping",
-    "Lifestyle",
-    "General",
-  ];
 
   const colors = [
     { name: "Green", hex: "#277C78" },
@@ -62,12 +49,8 @@ function CreateBudgetForm({ close, openModal }) {
     { name: "Orange", hex: "#BE6C49" },
   ];
 
-  const categories = availableCategories.filter(
-    (category) => !budgets.some((budget) => budget.category === category),
-  );
-
   // Extract used colors from the budgets
-  const usedColors = budgets.map((budget) => budget.theme);
+  const usedColors = pots.map((pot) => pot.theme);
 
   // Filter available colors by excluding used ones
   const availableColors = colors.filter(
@@ -83,61 +66,50 @@ function CreateBudgetForm({ close, openModal }) {
 
   return (
     <FormLayout
-      title="Budget"
-      description="Choose a category to set a spending budget.These categories can help you monitor spending."
+      title="Pots"
+      description="Create a pot to set savings targets.These can help keep you on track as you save for special purposes."
       close={close}
       openModal={openModal}
     >
       <form onSubmit={handleSubmit(submitForm)} className="flex flex-col gap-5">
         <div>
           <label
-            htmlFor="category"
+            htmlFor="name"
             className="block text-xs font-medium text-gray-700"
           >
-            Budget Category
+            Pot Name
           </label>
-          <Controller
-            name="category"
-            control={control}
-            rules={{ required: "Category is required" }}
-            render={({ field }) => (
-              <select
-                {...field}
-                className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            )}
+          <input
+            {...register("name", {
+              required: "Pot name is required",
+              setValueAs: (value) => value.trim(),
+              validate: (value) =>
+                value.length > 0 || "Name cannot be empty after trimming",
+            })}
+            type="text"
+            placeholder="e.g. Rainy Days"
+            className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
           />
-          {errors.category && (
-            <p className="text-sm text-red-500">{errors.category.message}</p>
-          )}
+           {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
         </div>
 
         <div>
           <label
-            htmlFor="maximum"
+            htmlFor="target"
             className="block text-xs font-medium text-gray-700"
           >
-            Maximum Spend
+            Target
           </label>
           <input
-            {...register("maximum", {
-              required: "Maximum spend is required",
+            {...register("target", {
+              required: "Target is required",
               valueAsNumber: true,
             })}
             type="number"
             placeholder="$ e.g. 2000"
             className="mt-1 w-full rounded-lg border border-gray-500 bg-inherit px-4 py-2 outline-none"
           />
-                {errors.maximum && (
-          <p className="text-sm text-red-500">{errors.maximum.message}</p>
-        )}
+            {errors.target && <p className="text-sm text-red-500">{errors.target.message}</p>}
         </div>
 
         <div>
@@ -187,7 +159,7 @@ function CreateBudgetForm({ close, openModal }) {
                   <div
                     key={color.hex}
                     onClick={() => {
-                      setValue("theme", color.hex);
+                      setValue("theme", color.hex, { shouldValidate: true }); // Update value and trigger validation
                       setIsDropdownOpen(false);
                     }}
                     className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
@@ -211,11 +183,11 @@ function CreateBudgetForm({ close, openModal }) {
           className="mt-2 rounded-lg bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#696868]"
           disabled={isCreating}
         >
-          Add Budget
+          Add Pot
         </button>
       </form>
     </FormLayout>
   );
 }
 
-export default CreateBudgetForm;
+export default CreatePotsForm;

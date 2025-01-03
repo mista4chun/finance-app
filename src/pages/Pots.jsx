@@ -1,7 +1,10 @@
+import PotsCompilations from "../features/Pots/PotsComilations";
+
+
 function Pots() {
   return (
     <div>
-      Pots
+   <PotsCompilations />
      
     </div>
   );
