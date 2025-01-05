@@ -95,22 +95,22 @@ function Table() {
     { value: "General", label: "General" },
   ];
 
-  if (isLoading) return <Spinner />;
+  // if (isLoading) return <Spinner />;
   if (error) return <p>Error loading transactions.</p>;
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between md:items-start">
+      <div className="mb-8 flex items-center justify-between ">
         <input
           type="text"
           placeholder="Search by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-4 rounded-lg border border-gray-500 p-2 outline-none"
+          className=" rounded-lg border border-gray-500 p-2 outline-none"
         />
 
         <div className="flex items-center gap-8">
-          <div className="relative mx-auto max-w-md">
+          <div className="relative  max-w-md">
             <div className="flex items-center gap-3">
               <p className="hidden text-gray-400 md:block">Sort by</p>
               <button

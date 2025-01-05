@@ -16,3 +16,20 @@ export const formatISODate = (isoDate, dateFormat = 'yyyy-MM-dd') => {
     return null;
   }
 };
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+
+  // Determine the correct suffix
+  const suffix =
+    day === 1 || day === 21 || day === 31
+      ? "st"
+      : day === 2 || day === 22
+      ? "nd"
+      : day === 3 || day === 23
+      ? "rd"
+      : "th";
+
+  return `Monthly - ${day}${suffix}`;
+};

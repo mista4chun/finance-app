@@ -10,7 +10,7 @@ function AppLayout() {
       </aside>
 
       <div className="grid grid-rows-[1fr_auto] overflow-y-scroll">
-        <main className=" mx-auto container mb-10  px-4 xl:px-16">
+        <main className=" mx-auto container mb-10  px-6 ">
           <Outlet />
         </main>
 
