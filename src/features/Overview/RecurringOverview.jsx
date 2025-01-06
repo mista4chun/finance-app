@@ -1,0 +1,64 @@
+import { useQuery } from "@tanstack/react-query";
+import { getRecurringBills } from "../../services/transactionApi";
+import { Link } from "react-router-dom";
+import { formatCurrency } from "../../utils/helper";
+
+function RecurringOverview() {
+      const {data: recurringBills, isLoading} = useQuery(
+        ["transactions", {}],
+        getRecurringBills,
+      );
+
+    
+
+  
+    
+      const paidBills = recurringBills?.filter((bill) => bill.status === "Paid");
+      const totalPaidBills = paidBills?.reduce(
+        (sum, bill) => sum + Math.abs(bill.amount),
+        0,
+      );
+    
+      const upComingBills = recurringBills?.filter(
+        (bill) => bill.status === "Upcoming" || bill.status === "Due Soon",
+      );
+      const totalUpcomingBills = upComingBills?.reduce(
+        (sum, bill) => sum + Math.abs(bill.amount),
+        0,
+      );
+    
+      const dueSoonBills = recurringBills?.filter(
+        (bill) => bill.status === "Due Soon",
+      );
+      const totalDueSoon = dueSoonBills?.reduce(
+        (sum, item) => sum + Math.abs(item.amount),
+        0,
+      );
+    
+    return (
+         <div className="  rounded-xl bg-gray-50 p-6">
+             <div className="flex items-center justify-between pb-4">
+               <h2 className="text-2xl font-bold">Recurring Bills</h2>
+               <Link to="/recurringBills" className="flex items-center gap-3 text-sm">
+                 <span className="text-gray-500">See Details</span>
+                 <img src="/icon-caret-right.svg" alt="" />
+               </Link>
+             </div>
+             <div className="bg-[#f8f4f0] rounded-md border-l-4 border-[#277c78] p-4 flex items-center justify-between">
+                <p  className="text-sm text-gray-500">Paid Bills</p>
+               <p className="font-bold">{formatCurrency(totalPaidBills)}</p>
+             </div>
+             <div className="bg-[#f8f4f0] rounded-md border-l-4 border-[#f2cdac] my-3 p-4 flex items-center justify-between">
+                <p className="text-sm text-gray-500">Total Upcoming</p>
+               <p className="font-bold">{formatCurrency(totalUpcomingBills)}</p>
+             </div>
+             <div className="bg-[#f8f4f0] rounded-md border-l-4 border-[#B2C9D7] p-4 flex items-center justify-between">
+                <p className="text-sm text-gray-500">Due Soon</p>
+               <p className="font-bold">{formatCurrency(totalDueSoon)}</p>
+             </div>
+            
+        </div>
+    )
+}
+
+export default RecurringOverview

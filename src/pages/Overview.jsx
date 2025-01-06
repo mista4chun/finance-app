@@ -1,7 +1,9 @@
+import OverviewCompilation from "../features/Overview/OverviewCompilation"
+
 function Overview() {
     return (
         <div>
-            Overview
+          <OverviewCompilation />
         </div>
     )
 }

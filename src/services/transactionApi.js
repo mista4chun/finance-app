@@ -70,3 +70,16 @@ export async function getRecurringBills({ queryKey }) {
 
   return filteredData;
 }
+
+export async function fetchTransactions() {
+  const { data, error} = await supabase.from("transactions").select()
+
+  if (error) {
+    console.error(error);
+    throw new Error("Transactions could not be loaded");
+  }
+
+
+  const filteredData = data.slice(0,5)
+  return filteredData
+}

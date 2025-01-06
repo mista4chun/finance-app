@@ -1,11 +1,10 @@
 import supabase from "./supabase";
 
 export async function getBalance() {
-    const {data, error} = await supabase.from('balance').select()
+  const { data, error } = await supabase.from("balance").select();
 
-    if(error) {
-        throw new Error("Balance could not be loaded")
-    }
-
-    return data
+  if (error) {
+    throw new Error("Balance could not be loaded");
+  }
+  return data;
 }
