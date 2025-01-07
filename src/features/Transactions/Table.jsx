@@ -95,7 +95,7 @@ function Table() {
     { value: "General", label: "General" },
   ];
 
-  // if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner />;
   if (error) return <p>Error loading transactions.</p>;
 
   return (

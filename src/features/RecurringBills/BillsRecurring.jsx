@@ -4,6 +4,7 @@ import { getRecurringBills } from "../../services/transactionApi";
 import { useState } from "react";
 import BillsRow from "./BillsRow";
 import { formatCurrency } from "../../utils/helper";
+import Logout from "../authentication/Logout";
 
 function BillsRecurring() {
   const [search, setSearch] = useState("");
@@ -89,13 +90,17 @@ function BillsRecurring() {
   if (isLoading)
     return (
       <p className="flex h-screen animate-pulse items-center justify-center text-2xl font-semibold">
-        Loading...{" "}
+        Loading...
       </p>
     );
 
   return (
     <>
+    <div className="flex items-center justify-between">
+
       <h1 className="my-8 text-4xl font-bold">Recurring Bills</h1>
+      <Logout />
+    </div>
       <section className="grid gap-5 lg:grid-cols-[1fr_1.5fr]">
 
         <div className="flex flex-col gap-6 md:flex-row md:justify-between lg:flex-col lg:justify-start">

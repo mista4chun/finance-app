@@ -4,6 +4,7 @@ function Budgets() {
     return (
         <div>
            <BudgetsCompilations />
+           
         </div>
     )
 }

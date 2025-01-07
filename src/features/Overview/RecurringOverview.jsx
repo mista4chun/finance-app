@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getRecurringBills } from "../../services/transactionApi";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../../utils/helper";
+import CardSpinner from "../../ui/CardSpinner";
 
 function RecurringOverview() {
       const {data: recurringBills, isLoading} = useQuery(
@@ -34,12 +35,14 @@ function RecurringOverview() {
         (sum, item) => sum + Math.abs(item.amount),
         0,
       );
+
+      if(isLoading) return <CardSpinner />
     
     return (
-         <div className="  rounded-xl bg-gray-50 p-6">
-             <div className="flex items-center justify-between pb-4">
+         <div className="  rounded-xl bg-gray-50 px-6 pb-7 pt-6 ">
+             <div className="flex items-center justify-between py-4">
                <h2 className="text-2xl font-bold">Recurring Bills</h2>
-               <Link to="/recurringBills" className="flex items-center gap-3 text-sm">
+               <Link to="/recurring-bills" className="flex items-center gap-3 text-sm">
                  <span className="text-gray-500">See Details</span>
                  <img src="/icon-caret-right.svg" alt="" />
                </Link>
@@ -52,7 +55,7 @@ function RecurringOverview() {
                 <p className="text-sm text-gray-500">Total Upcoming</p>
                <p className="font-bold">{formatCurrency(totalUpcomingBills)}</p>
              </div>
-             <div className="bg-[#f8f4f0] rounded-md border-l-4 border-[#B2C9D7] p-4 flex items-center justify-between">
+             <div className="bg-[#f8f4f0] rounded-md border-l-4 border-[#B2C9D7] p-4  flex items-center justify-between">
                 <p className="text-sm text-gray-500">Due Soon</p>
                <p className="font-bold">{formatCurrency(totalDueSoon)}</p>
              </div>

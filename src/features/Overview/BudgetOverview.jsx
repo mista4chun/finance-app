@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useBudgets } from "../Budgets/useBudgets";
 import { Pie } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import TinyCardBudget from "./TinyCardBudget";
+import CardSpinner from "../../ui/CardSpinner";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, );
 
 function BudgetOverview() {
   const { budgets, isLoading } = useBudgets();
@@ -27,8 +28,10 @@ function BudgetOverview() {
     ],
   };
 
+  if(isLoading) return <CardSpinner />
+
   return (
-    <div className=" rounded-xl bg-gray-50 p-4 mb-7">
+    <div className=" rounded-xl bg-gray-50 px-6 pb-12 pt-6 mb-7 ">
       <div className="flex items-center justify-between pb-4">
         <h2 className="text-2xl font-bold">Budgets</h2>
         <Link to="/budgets" className="flex items-center gap-3 text-sm">
@@ -36,8 +39,8 @@ function BudgetOverview() {
           <img src="/icon-caret-right.svg" alt="" />
         </Link>
       </div>
-      <div className="grid md:grid-cols-2 gap-5 items-center">
-        <div className="mx-auto size-64 px-5 pb-10 md:size-72 ">
+      <div className="grid md:grid-cols-2 gap-5 md:justify-items-end ">
+        <div className="mx-auto size-52 lg:size-44   ">
           <Pie data={pieChartData} />
         </div>
 

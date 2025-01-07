@@ -1,13 +1,9 @@
 import { formatCurrency } from "../../utils/helper";
 import { Pie } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+
+ChartJS.register(ArcElement, Tooltip, );
 
 function BudgetsSummary({ budgets }) {
   const pieChartData = {
@@ -29,9 +25,9 @@ function BudgetsSummary({ budgets }) {
   };
   return (
     <div className="flex flex-col rounded-xl  bg-gray-50 px-8 pb-5 pt-10 font-semibold md:flex-row md:justify-between lg:flex-col">
-      <div className=" size-64 md:size-72 mx-auto  px-5 pb-10 ">
-       <Pie data={pieChartData} />
-      </div>
+       <div className="size-64 mx-auto pb-8 ">
+      <Pie data={pieChartData} />
+    </div>
 
       <div className="grow">
         <h2 className="text-xl font-bold">Spending Summary</h2>

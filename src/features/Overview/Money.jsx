@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "../../services/balanceApi";
 import { formatCurrency } from "../../utils/helper";
+import Logout from "../authentication/Logout";
 
 function Money() {
   const { data: balance = [], isLoading } = useQuery({
@@ -35,7 +36,11 @@ function Money() {
 
   return (
     <>
+    <div className="flex items-center justify-between">
+
       <h1 className="my-8 text-4xl font-bold">Overview</h1>
+      <Logout />
+    </div>
       <section className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
         {items.map((item, index) => (
           <div

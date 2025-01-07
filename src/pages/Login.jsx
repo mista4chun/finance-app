@@ -1,7 +1,9 @@
+import LoginForm from "../features/authentication/LoginForm"
+
 function Login() {
     return (
         <div>
-            Login
+            <LoginForm />
         </div>
     )
 }

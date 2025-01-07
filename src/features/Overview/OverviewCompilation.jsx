@@ -8,13 +8,13 @@ function OverviewCompilation() {
   return (
     <div>
       <Money />
-      <div className="grid items-end gap-4 lg:grid-cols-[auto_0.8fr]">
-        <div>
+      <div className="grid  gap-4 lg:grid-cols-[1.5fr_1fr]">
+        <div >
           <PotOverview />
           <TransactionsOverview />
         </div>
 
-        <div >
+        <div  >
           <BudgetOverview />
 
           <RecurringOverview />
