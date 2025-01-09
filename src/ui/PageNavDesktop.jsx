@@ -8,6 +8,9 @@ function PageNavDesktop() {
       className={`h-screen rounded-r-xl bg-[#201f24] ${minimizeMenu ? "w-20" : "w-72"}`}
     >
       <nav className="flex h-screen flex-col items-start justify-between py-10">
+        <div className="flex flex-col items-start gap-10 justify-center">
+
+      
         <div className="px-6 ">
           <img
             src={minimizeMenu ? "/logo-small.svg" : "/logo-large.svg"}
@@ -15,7 +18,7 @@ function PageNavDesktop() {
           />
         </div>
 
-        <ul className=" -mt-[21rem] space-y-3">
+        <ul className=" space-y-3">
           <li>
             <NavLink
               to="/overview"
@@ -202,6 +205,7 @@ function PageNavDesktop() {
             </NavLink>
           </li>
         </ul>
+        </div>
         <button className="px-8" onClick={() => setMinimizeMenu(!minimizeMenu)}>
           {minimizeMenu ? (
             <img src="/icon-minimize-menu.svg" alt="minimize" />

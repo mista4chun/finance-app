@@ -13,7 +13,7 @@ function TransactionsTable() {
       <Logout />
       </div>
 
-      <div className="rounded-xl bg-gray-50 px-8 pb-10 pt-6 max-w-6xl">
+      <div className="rounded-xl bg-gray-50 px-8 pb-10 pt-6 ">
      
         <Table />
       </div>
