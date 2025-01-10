@@ -127,9 +127,10 @@ Password: "pass0987"
 React hook form is such a great lib for handling form i think it shines more while handling errors.
 Overall i learnt a lot polished my React skills.
 
+ ## Debouncing the Search Term
+
 I used debounced to fix searching functionality because it was re-rendering for each letter i typed.
  
- ## Debouncing the Search Term
 
 This code snippet shows how to debounce a search term input to reduce the number of API calls or expensive operations while typing.
 
@@ -142,7 +143,7 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, [search]);
 
-
+```
 
 
 
