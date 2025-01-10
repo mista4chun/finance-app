@@ -93,8 +93,8 @@ This project has various features. Below are some screenshots demonstrating diff
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [https://github.com/mista4chun/finance-app](https://github.com/mista4chun/finance-app)
+- Live Site URL: [https://finance-app-seven-pi.vercel.app](https://finance-app-seven-pi.vercel.app)
 
 
 
