@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { login } from "../../services/apiAuth";
+
 import { useLogin } from "./useLogin";
-import MiniSpinner from "../../ui/MiniSpinner";
+import MiniSpinner from "../../ui/MiniSpinner"
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { mutate, isLoading } = useLogin();
+
   function handleSubmit(e) {
     e.preventDefault();
     if (!email || !password) return;
@@ -22,6 +23,7 @@ function LoginForm() {
       },
     );
   }
+
   return (
     <div className="grid grid-cols-1 gap-28 lg:flex lg:items-center">
       <img
@@ -70,10 +72,10 @@ function LoginForm() {
             />
           </div>
           <button
-            className="mt-2 rounded-md bg-[#201F24] p-4 text-sm font-bold text-gray-50"
+            className="mt-2 rounded-md bg-[#201F24] p-4 text-sm font-bold text-gray-50 hover:bg-[#98908B]"
             disabled={isLoading}
           >
-            {!isLoading ? " Login" : <MiniSpinner />}
+           {!isLoading ? "login" : <MiniSpinner />  }
           </button>
 
           <p className="my-3 text-center text-sm font-medium text-gray-400">
