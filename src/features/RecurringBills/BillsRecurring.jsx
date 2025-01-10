@@ -1,17 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getRecurringBills } from "../../services/transactionApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BillsRow from "./BillsRow";
 import { formatCurrency } from "../../utils/helper";
 import Logout from "../authentication/Logout";
 
 function BillsRecurring() {
   const [search, setSearch] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const [sort, setSort] = useState({ column: "date", ascending: false });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Latest");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(search);
+    }, 300); // Adjust delay as needed
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const handleSort = (type) => {
     // Update the selected sort value for display
@@ -53,8 +61,11 @@ function BillsRecurring() {
   };
 
   const { data: recurringBills, isLoading } = useQuery(
-    ["transactions", { search, sort }],
+    ["transactions", { search: debouncedSearchTerm, sort }],
     getRecurringBills,
+    {
+      enabled: !!debouncedSearchTerm || search === "", // Only fetch if search term exists
+    },
   );
   const totalBills = recurringBills?.reduce(
     (sum, item) => sum + Math.abs(item.amount),
@@ -96,13 +107,11 @@ function BillsRecurring() {
 
   return (
     <>
-    <div className="flex items-center justify-between">
-
-      <h1 className="my-8 text-4xl font-bold">Recurring Bills</h1>
-      <Logout />
-    </div>
+      <div className="flex items-center justify-between">
+        <h1 className="my-8 text-4xl font-bold">Recurring Bills</h1>
+        <Logout />
+      </div>
       <section className="grid gap-5 lg:grid-cols-[1fr_1.5fr]">
-
         <div className="flex flex-col gap-6 md:flex-row md:justify-between lg:flex-col lg:justify-start">
           <div className="flex grow items-center gap-6 rounded-lg bg-[#201f24] px-6 py-8 md:flex-col md:items-start md:gap-8 lg:grow-0">
             <img src="/icon-recurring-bills.svg" alt="" />

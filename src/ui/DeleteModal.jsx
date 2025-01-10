@@ -1,4 +1,4 @@
-
+import { motion, AnimatePresence } from "framer-motion";
 
 function Modal({
   isOpen,
@@ -13,7 +13,12 @@ function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0">
+    <AnimatePresence mode="wait">
+    <motion.div className="fixed inset-0"
+    initial={{ opacity: 0, y: 20 }} // Starting animation
+    animate={{ opacity: 1, y: 0 }} // While in DOM
+    exit={{ opacity: 0, y: -20 }} // Exit animation
+    transition={{ duration: 0.4, ease: "easeInOut" }}>
       <div className="absolute inset-0 z-40 flex h-screen items-center justify-center bg-black/40">
         <div className="max-w-sm rounded-2xl bg-gray-100 px-6 py-8 md:max-w-xl">
           <div className="flex items-center justify-between gap-3 pb-4">
@@ -45,7 +50,8 @@ function Modal({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
+    </AnimatePresence>
   );
 }
 

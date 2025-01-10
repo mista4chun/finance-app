@@ -5,13 +5,14 @@ import Pagination from "../../ui/Pagination";
 
 import { getTransactions } from "../../services/transactionApi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PAGE_SIZE } from "../../utils/constants";
 
 function Table() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   const [sort, setSort] = useState({ column: "date", ascending: false });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -22,13 +23,24 @@ function Table() {
 
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
 
+    // Debounce the search term
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setDebouncedSearchTerm(search);
+      }, 300); // Adjust delay as needed
+      return () => clearTimeout(timer);
+    }, [search]);
+
   const {
     data: transactionsData,
     isLoading,
     error,
   } = useQuery(
-    ["transactions", { page, search, PAGE_SIZE, sort, filter }],
+    ["transactions", { page, search: debouncedSearchTerm, PAGE_SIZE, sort, filter }],
     getTransactions,
+    {
+      enabled: !!debouncedSearchTerm || search === '', // Only fetch if search term exists
+    }
   );
 
   const transactions = transactionsData?.data || [];

@@ -4,11 +4,11 @@ This is a solution to the [Personal finance app challenge on Frontend Mentor](ht
 
 ## Table of contents
 
-- [Overview](#overview)
+
   - [The challenge](#the-challenge)
   - [Screenshot](#screenshot)
   - [Links](#links)
-- [My process](#my-process)
+
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
@@ -16,9 +16,9 @@ This is a solution to the [Personal finance app challenge on Frontend Mentor](ht
 - [Author](#author)
 - [Acknowledgments](#acknowledgments)
 
-**Note: Delete this note and update the table of contents based on what sections you keep.**
 
-## Overview
+
+
 
 ### The challenge
 
@@ -42,83 +42,114 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+# My Project
 
-Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
+This project has various features. Below are some screenshots demonstrating different aspects of it.
 
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
+## Table of Contents
+1. [Feature 1](#feature-1)
+2. [Feature 2](#feature-2)
+3. [Feature 3](#feature-3)
+4. [Feature 4](#feature-4)
+5. [Feature 5](#feature-5)
 
-Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
+---
 
-**Note: Delete this note and the paragraphs above when you add your screenshot. If you prefer not to add a screenshot, feel free to remove this entire section.**
+## Feature 1
+
+### Screenshot 1
+![Feature 1 Screenshot](./screenshots/screenshot1.png)
+
+---
+
+## Feature 2
+
+### Screenshot 2
+![Feature 2 Screenshot](assets/screenshots/screenshot2.png)
+
+---
+
+## Feature 3
+
+### Screenshot 3
+![Feature 3 Screenshot](assets/screenshots/screenshot3.png)
+
+---
+
+## Feature 4
+
+### Screenshot 4
+![Feature 4 Screenshot](assets/screenshots/screenshot4.png)
+
+---
+
+## Feature 5
+
+### Screenshot 5
+![Feature 5 Screenshot](assets/screenshots/screenshot5.png)
+
+
+
 
 ### Links
 
 - Solution URL: [Add solution URL here](https://your-solution-url.com)
 - Live Site URL: [Add live site URL here](https://your-live-site-url.com)
 
-## My process
+
 
 ### Built with
 
 - Semantic HTML5 markup
-- CSS custom properties
-- Flexbox
-- CSS Grid
+
 - Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- [Next.js](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
+- Tailwindcss - CSS Library
+- Supabase 
+- React Query
+- React hook Form
+- Hot Toast - For notifications
+- Motion - For animation
+- React Router
 
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
+
 
 ### What I learned
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
+I was able to build a backend without any prior knowledge with the powerful tool called supabase superb product.I learnt to manage remote state with react query(tanstack query) things like mutation prefetching and useQuery. And I must say things like Pagination, Search, filter and Sort is a breeze when done on the server side I was able to achieve that with supabase. Authentication was implemented easily with the help of supabase again I must say Supabase and React Query make a powerful combination.
 
-To see how you can add code snippets, see below:
+Things Like CRUD operations was fun to practice both in Budgets and pots page.
 
-```html
-<h1>Some HTML code I'm proud of</h1>
-```
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
-```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
+Just in case you read the "Readme" and do not feel like signing up though i think it's pretty easy with services like Temp-mail here's access email and password for you.
+Email: "fortune@example.com"
+Password: "pass0987"
 
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
+React hook form is such a great lib for handling form i think it shines more while handling errors.
+Overall i learnt a lot polished my React skills.
 
-**Note: Delete this note and the content within this section and replace with your own learnings.**
+
+
+
 
 ### Continued development
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
+Sad I could not implement advanced react patterns like compound component. Hoping I get the hang of it and implement it in my next project that will be nice. And I hoping to perfect building custom drop downs with amazing styles. Still learning Motion(fka. Framer Motion) there are scarce resources to learn motion. I guess the documentation will have to do.
 
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+
 
 ### Useful resources
 
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
-
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
+- ChatGPT [openai.chat.com] works as a useful resource too it helped me with my filter, sort and pagination logic.
 
 ## Author
 
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
+- Website - [portfolio](https://www.porfoliox.netlify.app)
+- Frontend Mentor - [@mista4chun](https://www.frontendmentor.io/profile/mista4chun)
+- Twitter - [@mista4chun](https://www.twitter.com/mista4chun)
 
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
+
 
 ## Acknowledgments
 
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
+I will like to thank Frontend mentor for this beautiful yet hard project it was fun to build long but fun.
 
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
