@@ -5,10 +5,10 @@ import { formatCurrency } from "../../utils/helper";
 import CardSpinner from "../../ui/CardSpinner";
 
 function RecurringOverview() {
-      const {data: recurringBills, isLoading} = useQuery(
-        ["transactions", {}],
-        getRecurringBills,
-      );
+      const {data: recurringBills, isLoading} = useQuery({
+       queryKey: ["transactions"],
+       queryFn: getRecurringBills,
+});
 
     
 

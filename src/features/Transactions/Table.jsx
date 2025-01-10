@@ -12,7 +12,7 @@ function Table() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   const [sort, setSort] = useState({ column: "date", ascending: false });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,25 +23,27 @@ function Table() {
 
   const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
 
-    // Debounce the search term
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setDebouncedSearchTerm(search);
-      }, 300); // Adjust delay as needed
-      return () => clearTimeout(timer);
-    }, [search]);
+  // Debounce the search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(search);
+    }, 300); // Adjust delay as needed
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const {
     data: transactionsData,
     isLoading,
     error,
-  } = useQuery(
-    ["transactions", { page, search: debouncedSearchTerm, PAGE_SIZE, sort, filter }],
-    getTransactions,
-    {
-      enabled: !!debouncedSearchTerm || search === '', // Only fetch if search term exists
-    }
-  );
+  } = useQuery({
+    queryKey: [
+      "transactions",
+      { page, search: debouncedSearchTerm, PAGE_SIZE, sort, filter },
+    ],
+    queryFn: getTransactions,
+
+    enabled: !!debouncedSearchTerm || search === "", // Only fetch if search term exists
+  });
 
   const transactions = transactionsData?.data || [];
   const totalCount = transactionsData?.count || 0;

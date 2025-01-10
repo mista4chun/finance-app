@@ -60,13 +60,11 @@ function BillsRecurring() {
     }
   };
 
-  const { data: recurringBills, isLoading } = useQuery(
-    ["transactions", { search: debouncedSearchTerm, sort }],
-    getRecurringBills,
-    {
-      enabled: !!debouncedSearchTerm || search === "", // Only fetch if search term exists
-    },
-  );
+  const { data: recurringBills, isLoading } = useQuery({
+    queryKey: ["transactions", { search: debouncedSearchTerm, sort }],
+    queryFn: getRecurringBills,
+    enabled: !!debouncedSearchTerm || search === "", // Only fetch if search term exists
+  });
   const totalBills = recurringBills?.reduce(
     (sum, item) => sum + Math.abs(item.amount),
     0,
