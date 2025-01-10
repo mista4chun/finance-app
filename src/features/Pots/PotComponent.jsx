@@ -33,7 +33,7 @@ function PotComponent({ pot }) {
             <div className="absolute right-0 w-32 divide-y rounded-md bg-gray-100 px-4 py-4 text-sm shadow-xl">
               <EditPot pot={pot} close={close} openModal={isMiniModalOpen} />
 
-              <DeletePot potId={pot.id} />
+              <DeletePot pot={pot}  />
             </div>
           )}
         </div>

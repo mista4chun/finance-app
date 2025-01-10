@@ -4,7 +4,7 @@ import { useState } from "react";
 import EditBudget from "./EditBudget";
 import DeleteBudget from "./DeleteBudget";
 
-function BudgetComponent({ budget, close, openModal }) {
+function BudgetComponent({ budget }) {
   
   const remaining = Math.abs(budget.maximum) - Math.abs(budget.spent);
   const rems = remaining < 0 ? 0 : remaining;
@@ -35,9 +35,9 @@ function BudgetComponent({ budget, close, openModal }) {
           {isMiniModalOpen && (
             <div className="absolute right-0 w-32 divide-y rounded-md bg-gray-100 px-4 py-4 text-sm shadow-xl">
            
-                <EditBudget budget={budget} close={close} openModal={openModal} />
+                <EditBudget budget={budget}  />
              
-              <DeleteBudget budgetId={budget.id} />
+              <DeleteBudget budget={budget} />
             </div>
           )}
         </div>

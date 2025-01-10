@@ -107,6 +107,7 @@ function EditBudgetForm({ showModal, setShowModal, budget = {} }) {
         <p className="pb-4 text-sm text-gray-600">
           As your budgets change, feel free to update your spending limits.
         </p>
+      
 
         <form
           onSubmit={handleSubmit(submitForm)}

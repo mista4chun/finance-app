@@ -8,7 +8,7 @@ function PageNavDesktop() {
       className={`h-screen rounded-r-xl bg-[#201f24] ${minimizeMenu ? "w-20" : "w-72"}`}
     >
       <nav className="flex h-screen flex-col items-start justify-between py-10">
-        <div className="flex flex-col items-start gap-10 justify-center">
+        <div className="flex flex-col items-start gap-16 justify-center">
 
       
         <div className="px-6 ">

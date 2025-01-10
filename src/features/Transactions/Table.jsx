@@ -4,11 +4,12 @@ import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 
 import { getTransactions } from "../../services/transactionApi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { PAGE_SIZE } from "../../utils/constants";
 
 function Table() {
+  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
@@ -35,7 +36,14 @@ function Table() {
 
   const totalPages = totalCount > 0 ? Math.ceil(totalCount / PAGE_SIZE) : 1;
 
-    
+  queryClient.prefetchQuery({
+    queryKey: [
+      "transaction",
+      { page: page + 1, search, PAGE_SIZE, sort, filter },
+    ],
+    queryFn: getTransactions,
+  });
+
   const handleSort = (type) => {
     // Update the selected sort value for display
     const sortLabels = {
@@ -100,24 +108,24 @@ function Table() {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between ">
+      <div className="mb-8 flex items-center justify-between">
         <input
           type="text"
           placeholder="Search by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className=" rounded-lg border border-gray-500 p-2 outline-none"
+          className="rounded-lg border border-gray-500 p-2 outline-none"
         />
 
         <div className="flex items-center gap-8">
-          <div className="relative  max-w-md">
+          <div className="relative max-w-md">
             <div className="flex items-center gap-3">
               <p className="hidden text-gray-400 md:block">Sort by</p>
               <button
                 className="cursor-pointer items-center justify-between bg-transparent outline-none ring-gray-500 ring-offset-2 md:flex md:gap-4 md:rounded-md md:px-4 md:py-2 md:ring-1"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <span className="hidden md:block text-sm">{selectedSort}</span>
+                <span className="hidden text-sm md:block">{selectedSort}</span>
                 <img
                   src="/icon-caret-down.svg"
                   alt="caret"
@@ -151,7 +159,9 @@ function Table() {
                 className="cursor-pointer items-center justify-between bg-transparent outline-none ring-gray-500 ring-offset-2 md:flex md:gap-4 md:rounded-md md:px-4 md:py-2 md:ring-1"
                 onClick={() => setIsDropdownOpen1(!isDropdownOpen1)}
               >
-                <span className="hidden md:block text-sm">{selectedFilter}</span>
+                <span className="hidden text-sm md:block">
+                  {selectedFilter}
+                </span>
                 <img
                   src="/icon-caret-down.svg"
                   alt="caret"
@@ -201,7 +211,7 @@ function Table() {
           <p>No Transaction found</p>
         )}
       </div>
-     
+
       <Pagination totalPages={totalPages} page={page} setPage={setPage} />
     </>
   );

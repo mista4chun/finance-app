@@ -1,29 +1,31 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteBudget } from "../../services/budgetApi";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import { useDelete } from "./useDelete";
+import Modal from "../../ui/DeleteModal";
 
-function DeleteBudget({ budgetId }) {
-  const queryClient = useQueryClient();
-  const { mutate, isLoading: isDeleting } = useMutation({
-    mutationFn: deleteBudget,
+function DeleteBudget({ budget }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { mutate, isDeleting } = useDelete();
 
-    onSuccess: () => {
-      toast.success("Budget successfully deleted");
-      queryClient.invalidateQueries({
-        queryKey: ["budgets"],
-        
-      });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  function handleDelete() {
+    mutate(budget.id);
+  }
+
   return (
-    <button
-      className="pt-3 text-red-600"
-      disabled={isDeleting}
-      onClick={() => mutate(budgetId)}
-    >
-      Delete Budget
-    </button>
+    <>
+      <button className="pt-3 text-red-600" onClick={() => setIsOpen(!isOpen)}>
+        Delete Budget
+      </button>
+      <Modal
+        isOpen={isOpen}
+        title={`Delete ‘${budget.category}’?`}
+        description="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+        confirmText="Yes, Confirm Deletion"
+        cancelText="No, Go Back"
+        onConfirm={handleDelete}
+        onCancel={() => setIsOpen(false)}
+        isLoading={isDeleting}
+      />
+    </>
   );
 }
 
