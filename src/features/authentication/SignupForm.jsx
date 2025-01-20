@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useSignup } from "./useSignup";
-
+import LoadingSpinner from "../../ui/LoadingSpinner";
 
 function SignupForm() {
   const { register, getValues, handleSubmit, reset, formState } = useForm();
@@ -99,6 +99,7 @@ function SignupForm() {
             </label>
             <input
               type="password"
+              disabled={isLoading}
               id="passwordConfirm"
               {...register("passwordConfirm", {
                 required: "This field is required",
@@ -115,9 +116,9 @@ function SignupForm() {
           </div>
           <button
             type="submit"
-            className="mt-4 w-full rounded-md bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#98908B] focus:outline-none focus:ring-2 "
+            className="mt-4 w-full rounded-md bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#98908B] focus:outline-none focus:ring-2"
           >
-            Submit
+            {isLoading ? <LoadingSpinner /> : "Submit"}
           </button>
         </form>
       </div>

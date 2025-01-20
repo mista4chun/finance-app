@@ -6,7 +6,7 @@ import LoadingSpinner from "../../ui/LoadingSpinner";
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate, isLoading } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -18,12 +18,11 @@ function LoginForm() {
         onSettled: () => {
           setEmail("");
           setPassword("");
-       
         },
       },
     );
   }
- 
+
   return (
     <div className="grid grid-cols-1 gap-28 lg:flex lg:items-center">
       <img
@@ -50,8 +49,8 @@ function LoginForm() {
               id="email"
               autoComplete="username"
               value={email}
+              disabled={isPending}
               onChange={(e) => setEmail(e.target.value)}
-             
               className="grow rounded-md border border-gray-600 bg-transparent px-4 py-3 outline-none"
             />
           </div>
@@ -68,19 +67,18 @@ function LoginForm() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-          
+              disabled={isPending}
               className="grow rounded-md border border-gray-600 bg-transparent px-4 py-3 outline-none"
             />
           </div>
           <button
-           
             className={`mt-2 rounded-md p-4 text-sm font-bold text-gray-50 transition-all ${
-              isLoading
-                ? "cursor-not-allowed bg-gray-400"
+              isPending
+                ? "cursor-not-allowed bg-[#201F24]"
                 : "bg-[#201F24] hover:bg-[#98908B]"
             }`}
           >
-            {isLoading ? <LoadingSpinner /> : "Login"}
+            {isPending ? <LoadingSpinner /> : "Login"}
           </button>
 
           <p className="my-3 text-center text-sm font-medium text-gray-400">
@@ -89,7 +87,7 @@ function LoginForm() {
               to="/signup"
               className="font-bold text-gray-800 underline underline-offset-4"
             >
-             <span className="mr-2"> Sign Up</span>
+              <span className="mr-2"> Sign Up</span>
             </Link>
           </p>
         </div>

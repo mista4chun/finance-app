@@ -7,7 +7,7 @@ export async function signup({ name, email, password }) {
     options: {
       data: {
         name,
-        avatar: "",
+       
       },
     },
   });
@@ -16,17 +16,20 @@ export async function signup({ name, email, password }) {
 }
 
 
+// apiAuth.js
 export async function login({ email, password }) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
+  // console.log("Login response:", data); // Debug login response
+
   if (error) throw new Error(error.message);
 
-  return data;
+  // Return the user object specifically
+  return data.user;
 }
-
 
 
 export async function getUser() {
@@ -42,6 +45,7 @@ export async function getUser() {
 
   return data?.user;
 }
+
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
