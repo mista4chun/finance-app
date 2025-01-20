@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import { useLogin } from "./useLogin";
-import MiniSpinner from "../../ui/MiniSpinner"
+import LoadingSpinner from "../../ui/LoadingSpinner";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -19,17 +18,19 @@ function LoginForm() {
         onSettled: () => {
           setEmail("");
           setPassword("");
+       
         },
       },
     );
   }
-
+ 
   return (
     <div className="grid grid-cols-1 gap-28 lg:flex lg:items-center">
       <img
         src="/illustration-authentication.svg"
         alt=""
         className="m-4 hidden rounded-xl lg:block"
+        loading="eager"
       />
       <div className="rounded-b-lg bg-[#201f24] p-6 lg:hidden">
         <img src="/logo-large.svg" alt="" className="mx-auto" />
@@ -50,7 +51,7 @@ function LoginForm() {
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
+             
               className="grow rounded-md border border-gray-600 bg-transparent px-4 py-3 outline-none"
             />
           </div>
@@ -67,24 +68,28 @@ function LoginForm() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
+          
               className="grow rounded-md border border-gray-600 bg-transparent px-4 py-3 outline-none"
             />
           </div>
           <button
-            className="mt-2 rounded-md bg-[#201F24] p-4 text-sm font-bold text-gray-50 hover:bg-[#98908B]"
-            disabled={isLoading}
+           
+            className={`mt-2 rounded-md p-4 text-sm font-bold text-gray-50 transition-all ${
+              isLoading
+                ? "cursor-not-allowed bg-gray-400"
+                : "bg-[#201F24] hover:bg-[#98908B]"
+            }`}
           >
-           {!isLoading ? "login" : <MiniSpinner />  }
+            {isLoading ? <LoadingSpinner /> : "Login"}
           </button>
 
           <p className="my-3 text-center text-sm font-medium text-gray-400">
-            Need to create an account?{" "}
+            Need to create an account?
             <Link
               to="/signup"
               className="font-bold text-gray-800 underline underline-offset-4"
             >
-              Sign Up
+             <span className="mr-2"> Sign Up</span>
             </Link>
           </p>
         </div>

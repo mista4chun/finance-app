@@ -4,21 +4,23 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export function useLogin() {
-  const queryClient =  useQueryClient()
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutate, isLoading } = useMutation({
+  const {isLoading, mutate} = useMutation({
     mutationFn: ({ email, password }) => login({ email, password }),
     onSuccess: (user) => {
-      queryClient.setQueriesData(['user'], user)
-      navigate("/overview",{replace: true});
+     
+      queryClient.setQueriesData(["user"], user);
+      navigate("/overview", { replace: true });
+     
     },
     onError: (err) => {
       console.log("ERROR", err);
-      toast.error("Provided email or password is incorrect");
+      toast.error("The Provided email or password is incorrect");
     },
   });
-
-  return { mutate, isLoading };
-}
  
+
+return {isLoading, mutate}
+}

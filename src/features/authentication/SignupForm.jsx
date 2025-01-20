@@ -1,17 +1,14 @@
 import { useForm } from "react-hook-form";
 import { useSignup } from "./useSignup";
-import { useNavigate } from "react-router-dom";
+
 
 function SignupForm() {
-  const navigate = useNavigate()
   const { register, getValues, handleSubmit, reset, formState } = useForm();
   const { errors } = formState;
   const { mutate, isLoading } = useSignup();
 
   function onSubmit({ name, email, password }) {
     mutate({ name, email, password }, { onSettled: () => reset() });
-    navigate("/overview")
-    
   }
 
   return (
@@ -31,6 +28,7 @@ function SignupForm() {
             <input
               type="text"
               id="name"
+              disabled={isLoading}
               {...register("name", { required: "This field is required" })}
               className="mt-1 block w-full rounded-md border border-gray-600 bg-transparent px-4 py-3 shadow-sm outline-none sm:text-sm"
             />
@@ -50,6 +48,7 @@ function SignupForm() {
             <input
               type="email"
               id="email"
+              disabled={isLoading}
               {...register("email", {
                 required: "This field is required",
                 pattern: {
@@ -75,6 +74,7 @@ function SignupForm() {
             <input
               type="password"
               id="password"
+              disabled={isLoading}
               {...register("password", {
                 required: "This field is required",
                 minLength: {
@@ -115,7 +115,7 @@ function SignupForm() {
           </div>
           <button
             type="submit"
-            className="mt-4 w-full rounded-md bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#98908B] focus:outline-none focus:ring-2 focus:ring-[#201f20] focus:ring-offset-2"
+            className="mt-4 w-full rounded-md bg-[#201f24] px-4 py-3.5 font-bold text-white hover:bg-[#98908B] focus:outline-none focus:ring-2 "
           >
             Submit
           </button>
