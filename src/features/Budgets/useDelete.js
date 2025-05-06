@@ -3,18 +3,18 @@ import { deleteBudget } from "../../services/budgetApi";
 import toast from "react-hot-toast";
 
 export function useDelete() {
-    const queryClient = useQueryClient();
-    const { mutate, isLoading: isDeleting } = useMutation({
-      mutationFn: deleteBudget,
-  
-      onSuccess: () => {
-        toast.success("Budget successfully deleted");
-        queryClient.invalidateQueries({
-          queryKey: ["budgets"],
-        });
-      },
-      onError: (err) => toast.error(err.message),
-    });
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteBudget,
 
-    return {mutate, isDeleting}
+    onSuccess: () => {
+      toast.success("Budget successfully deleted");
+      queryClient.invalidateQueries({
+        queryKey: ["budgets"],
+      });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  return { mutate: mutation.mutate, isDeleting: mutation.isPending };
 }

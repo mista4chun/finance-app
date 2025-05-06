@@ -4,8 +4,9 @@ import { useEffect } from "react";
 
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
+  // 1. Load the user
   const { isAuthenticated, isLoading } = useUser();
-
+// 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       navigate("/login", { replace: true });
